@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Quotes are going to give me headaches",
+  "author": "BS",
+  "url": "www",
+  "likes": "100"
+}
