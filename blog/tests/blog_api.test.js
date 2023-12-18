@@ -66,6 +66,37 @@ test('blogs with a missing likes attribute will default to zero likes', async ()
   expect(response.body.likes).toBe(0)
 })
 
+
+test('delete a blog', async () => {
+  const blogToDelete = helper.helperBlogs[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(helper.helperBlogs.length - 1)
+
+  const contents = blogsAtEnd.map(blog => blog.title)
+
+  expect(contents).not.toContain(blogToDelete.title)
+})
+
+test('update a blog', async () => {
+  const blogToUpdate = helper.helperBlogs[0]
+
+  const update = {
+    likes: 111
+  }
+
+  const response = await api.put(`/api/blogs/${blogToUpdate.id}`)
+    .send(update)
+    .expect(200)
+
+  expect(response.body.likes).toBe(111)
+})
+
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
